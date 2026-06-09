@@ -1,4 +1,4 @@
-package lk.ijse.auctionsystem.Controller;
+package lk.ijse.auctionsystem;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;

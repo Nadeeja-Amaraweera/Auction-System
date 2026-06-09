@@ -1,4 +1,4 @@
-package lk.ijse.auctionsystem.Controller;
+package lk.ijse.auctionsystem;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -9,7 +9,7 @@ public class Client02 {
     public static void main(String[] args) {
         try {
 
-            Socket remoteSocket = new Socket("localhost",3000);
+            Socket remoteSocket = new Socket("localhost",6000);
             System.out.println("Connected to the Chat Server!");
 
             DataInputStream dataInputStream = new DataInputStream(remoteSocket.getInputStream());

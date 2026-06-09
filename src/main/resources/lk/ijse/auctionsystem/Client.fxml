@@ -17,7 +17,7 @@
                   <Font size="19.0" />
                </font>
             </Label>
-            <Button layoutX="609.0" layoutY="26.0" mnemonicParsing="false" onAction="#connectWithName" prefHeight="32.0" prefWidth="124.0" text="Connect">
+            <Button layoutX="609.0" layoutY="26.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="124.0" text="Connect">
                <font>
                   <Font size="16.0" />
                </font>
