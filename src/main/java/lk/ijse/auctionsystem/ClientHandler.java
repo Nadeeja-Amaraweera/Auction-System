@@ -1,6 +1,4 @@
-package lk.ijse.auctionsystem;
-
-import lk.ijse.auctionsystem.Controller.ClientController;
+package lk.ijse.auctionsystem.Controller;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -8,21 +6,19 @@ import java.net.Socket;
 import java.util.List;
 
 public class ClientHandler extends Thread{
+    private Socket socket;
+    private DataInputStream dataInputStream;
+    private DataOutputStream dataOutputStream;
+    private List<ClientHandler> clients;
+    private String clientName;
 
-private Socket socket;
-private List<ClientHandler> clients;
-private DataInputStream dataInputStream;
-private DataOutputStream dataOutputStream;
-private String clientName;
-
-
-    public ClientHandler(Socket socket, List<ClientHandler> clients) {
+    public ClientHandler (Socket socket,List<ClientHandler> clients){
         this.socket = socket;
         this.clients = clients;
         try {
             dataInputStream = new DataInputStream(socket.getInputStream());
             dataOutputStream = new DataOutputStream(socket.getOutputStream());
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -30,31 +26,42 @@ private String clientName;
     @Override
     public void run() {
         try {
-            dataOutputStream.writeUTF("Enter your name");
-
+            dataOutputStream.writeUTF("Enter your name: ");
             dataOutputStream.flush();
-            if (dataInputStream.)
             clientName = dataInputStream.readUTF();
-            System.out.println("Client Connected : "+clientName);
+            System.out.println("Client name received: " + clientName);
+            broadCastMessage(clientName + " has joined the chat!", this);
 
             String message;
-            while (true){
+            while (true) {
                 message = dataInputStream.readUTF();
-                System.out.println("Receive message "+ message);
+
+                System.out.println("Received from " + clientName + ": '" + message + "'");
+
+                if (message.equalsIgnoreCase("exit")) {
+                    break;
+                }
+
+                broadCastMessage(clientName + ": " + message, this);
             }
 
-        } catch (Exception e){
+            clients.remove(this);
+            broadCastMessage(clientName + " has left the chat!", this);
+            socket.close();
+
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private void broadCastMessage(String message ,ClientHandler sender){
-        for (ClientHandler client: clients){
+    private void broadCastMessage(String message,ClientHandler sender){
+        for (ClientHandler client: clients) {
             if (client != sender){
-                try{
-                    dataOutputStream.writeUTF(message);
-                    dataOutputStream.flush();
-                } catch (Exception e){
+                try {
+                    client.dataOutputStream.writeUTF(message);
+                    client.dataOutputStream.flush();
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
